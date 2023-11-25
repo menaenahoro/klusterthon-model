@@ -6,7 +6,7 @@ from src.queue.queue_handler import Boto3Class
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-
+boto_3 = Boto3Class()
 def lambda_handler(event, context):
     logger.info(event)
     if "body" in event:
@@ -22,8 +22,14 @@ def lambda_handler(event, context):
         course = event.get('user_id')
 
     if url_for=="queue":
-        boto_3 = Boto3Class()
         result =  boto_3.send_message_queue(user_id=user_id, course=course)
+
+        # Model to process function
+        return dict(message="successful", error=False)
+    
+
+    if url_for=="get_queue":
+        result =  boto_3.get_queue(course=course)
 
         # Model to process function
         return dict(message="successful", error=False)

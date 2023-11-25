@@ -25,7 +25,7 @@ class Boto3Class:
             'general':SQS_QUEUE_URL,
         }
 
-    def send_message_queue(self, user_id, course):
+    def send_message_queue(self, user_id, course=None):
         # Send message to SQS queue
         date = datetime.now()
         date_time = date.strftime("%Y-%m-%d, %H:%M:%S")
@@ -55,7 +55,7 @@ class Boto3Class:
         return response['MessageId']
 
 
-    def get_queue(self, course):
+    def get_queue(self, course=None):
 
         # Receive message from SQS queue
         response = self.sqs.receive_message(
@@ -74,7 +74,7 @@ class Boto3Class:
         message = response['Messages']
         # receipt_handle = message[0]['ReceiptHandle']
         # print('RECEIPT HANDLE  ',receipt_handle)
-        return message#self.get_message_info(message, course)
+        return self.get_message_info(message, course)
 
     def delete_message(self, receipt_handle, course):
 
