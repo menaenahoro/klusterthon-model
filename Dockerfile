@@ -32,5 +32,5 @@ ENV SECRET_KEY=$SECRET_KEY
 COPY src ./src
 #COPY lambda_function.py .
 
-CMD [ "src.lambda_function.lambda_handler" ]
+CMD [ "src.lambda_handler.lambda_handler" ]
 

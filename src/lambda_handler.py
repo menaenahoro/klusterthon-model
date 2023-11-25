@@ -25,11 +25,11 @@ def lambda_handler(event, context):
         result =  boto_3.send_message_queue(user_id=user_id, course=course)
 
         # Model to process function
-        return dict(message="successful", error=False)
+        return dict(message="successful", error=False, data=[])
     
 
     if url_for=="get_queue":
         result =  boto_3.get_queue(course=course)
 
         # Model to process function
-        return dict(message="successful", error=False)
+        return dict(message="successful", error=False, data=result)

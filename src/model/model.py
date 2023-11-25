@@ -2,12 +2,15 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import PCA
-
+import pandas as pd
 
 class Clustering:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, df):
+        self.df = df
+        self.preprocessor = None
+        self.pca = None
+        self.kmeans = None
 
 
     def process_data():
