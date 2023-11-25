@@ -1,85 +1,56 @@
-name: Staging Deployment
-      
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
-on:
-  #when there is a push to the master
-  push:
-    branches: [ staging ]
+name: AWS Prod Docker Deployment
+on: 
+  push: 
+    branches: [ "main" ]
 
 # Don't allow concurrent deploys on a branch
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: false
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    #does this mean that the files in my github repo are accessible by this YAML file?
-    - uses: actions/checkout@v2
-    
-    #installs a version of python, but I need this if deploying to a severless Python Lambda?
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+  Cypress-Test:
+   
+  
+    name: Build Docker Image
+    runs-on: ubuntu-latest  
+    steps:  
+        - name: Checkout
+          uses: actions/checkout@v2    
+          
+        - name: Setup AWS ECR Details
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+            aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+            aws-region: ${{secrets.AWS_REGION}}
 
-    #process-credit-score-staging
-    #credentials to connect to AWS
-    - name: Configure AWS credentials from Production account
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-1
-    # Runs a set of commands using the runners shell; THIS DOESN'T WORK
-    - name: Run a multi-line script
-      run: |
-         #install PIP
-         python -m pip install --upgrade pip
-         #install all dependencies as defined by requirements.txt in the current directory
-         mkdir packages
-         cd packages
-         pip3 install -r ../src/requirements.txt -t .
-         #rm -r *.dist-info __pycache__
-         #for installing invidividual modules
-         #pip3 install Flask -t .
-         #zip files into current directory
-         zip -r ${{ github.run_id }}.zip . ../src
-         
-         #ensuring current working directory is accessible by the function--this might not be doing anything
-         export PATH=$PATH:$(pwd)
 
-    - name: Upload to S3
-      run: aws s3 cp packages/${{ github.run_id }}.zip s3://process-credit-score-staging/process-credit-score-staging/${{ github.run_id }}.zip
+        - name: Login to Amazon ECR
+          id: login-pf-aws-ecr
+          uses: aws-actions/amazon-ecr-login@v1
+          
 
-    - name: Update lambda function code
-      run: aws lambda update-function-code --function-name process_credit_score_staging --s3-bucket process-credit-score-staging --s3-key process-credit-score-staging/${{ github.run_id }}.zip
+        - name: Build and push the tagged docker image to Amazon ECR
+          env:
+            ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
+            ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
+            IMAGE_TAG: latest
+          run: |
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SQS_QUEUE_URL_DS=${{secrets.SQS_QUEUE_URL_DS}} --build-arg SQS_QUEUE_URL_UI=${{secrets.SQS_QUEUE_URL_UI}} --build-arg SQS_QUEUE_URL_BE=${{secrets.SQS_QUEUE_URL_BE}} --build-arg SQS_QUEUE_URL_FE=${{secrets.SQS_QUEUE_URL_FE}} --build-arg SQS_QUEUE_URL_PM=${{secrets.SQS_QUEUE_URL_PM}} --build-arg SQS_QUEUE_URL=${{secrets.SQS_QUEUE_URL}} --build-arg ACCESS_KEY=${{secrets.ACCESS_KEY}} --build-arg SECRET_KEY=${{secrets.SECRET_KEY}} --build-arg ENVIRONMENT=production .
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Sleep for 5 seconds
-      run: sleep 5s
-      shell: bash
+        - name: Update lambda function code github_run_id:${{ github.run_id }}
+          env:
+            ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
+            ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
+            IMAGE_TAG: latest
+          run: aws lambda update-function-code --function-name klusterthon-model --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
 
-    - name: Release lambda function version
-      run: aws lambda publish-version --function-name process_credit_score_staging --description ${{ github.run_id }}    
-    
-    
-    #Deploy main.py to AWS
-    #- name: AWS Lambda Deploy
-    #  uses: appleboy/lambda-action@v0.0.4
-    #  with:
-    #        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
-    #        aws_region: 'eu-west-1'
-    #        #name of my AWS Lambda Function
-    #        function_name: 'process_credit_score_staging'
-    #        #contains all the files in my github repository
-    #        zip_file: packages/lambda_function.zip
+        - name: Sleep for 50 seconds
+          run: sleep 50s
+          shell: bash
+
+        - name: Release lambda function version
+          run: aws lambda publish-version --function-name klusterthon-model --description ${{ github.run_id }}    
+
