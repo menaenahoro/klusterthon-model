@@ -17,49 +17,43 @@ class Boto3Class:
             'sqs', region_name=AWS_REGION, aws_access_key_id=ACCESS_KEY,aws_secret_access_key=SECRET_KEY,)
 
         self.dict_sqs_url = {
-            'data_science':SQS_QUEUE_URL_DS,
-            'ui_ux':SQS_QUEUE_URL_UI,
-            'porduct_management':SQS_QUEUE_URL_PM,
-            'frontend':SQS_QUEUE_URL_FE,
-            'backend':SQS_QUEUE_URL_BE,
+            '65616d2ab382b3456c42247f':SQS_QUEUE_URL_DS,
+            '65616c6cb382b3456c42247d':SQS_QUEUE_URL_UI,
+            '65616501b382b3456c422477':SQS_QUEUE_URL_PM,
+            '65616a96b382b3456c422479':SQS_QUEUE_URL_FE,
+            '65616b81b382b3456c42247b':SQS_QUEUE_URL_BE,
             'general':SQS_QUEUE_URL,
         }
 
-    def send_message_queue(self, user_id, course=None):
+    def send_message_queue(self, user_id, course_id=None):
         # Send message to SQS queue
         date = datetime.now()
-        date_time = date.strftime("%Y-%m-%d, %H:%M:%S")
         response = self.sqs.send_message(
-            QueueUrl=self.dict_sqs_url.get(course, SQS_QUEUE_URL),
+            QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
             MessageAttributes={
                 'User': {
                     'DataType': 'String',
                     'StringValue': user_id
                 },
-                'Date': {
+                'CourseId': {
                     'DataType': 'String',
-                    'StringValue': date_time
-                },
-                'Course': {
-                    'DataType': 'String',
-                    'StringValue': course
+                    'StringValue': course_id
                 },
             },
             MessageBody=(
                 f'{user_id}'
-                f'{date_time}'
-                f'{course}'
-            ),MessageGroupId=course, MessageDeduplicationId=course
+                f'{course_id}'
+            ),MessageGroupId=course_id, MessageDeduplicationId=course_id
         )
 
         return response['MessageId']
 
 
-    def get_queue(self, course=None):
+    def get_queue(self, course_id=None):
 
         # Receive message from SQS queue
         response = self.sqs.receive_message(
-            QueueUrl=self.dict_sqs_url.get(course, SQS_QUEUE_URL),
+            QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
             AttributeNames=[
                 'SentTimestamp'
             ],
@@ -74,22 +68,51 @@ class Boto3Class:
         message = response['Messages']
         # receipt_handle = message[0]['ReceiptHandle']
         # print('RECEIPT HANDLE  ',receipt_handle)
-        return self.get_message_info(message, course)
+        result = self.get_message_info(message, course_id)
+        user_id_list = result.get('user_id_list', [])
+        return user_id_list
 
-    def delete_message(self, receipt_handle, course):
+    def delete_message(self, receipt_handle, course_id):
 
         # Delete received message from queue
         self.sqs.delete_message(
-            QueueUrl=self.dict_sqs_url.get(course, SQS_QUEUE_URL),
+            QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
             ReceiptHandle=receipt_handle
         )
         print('Received and deleted message: %s' % receipt_handle)
 
-    def get_message_info(self, messages, course):
+    def delete_bulk_messages(self, course_id):
+        response = self.sqs.receive_message(
+            QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
+            AttributeNames=[
+                'SentTimestamp'
+            ],
+            MaxNumberOfMessages=10,
+            MessageAttributeNames=[
+                'All'
+            ],
+            VisibilityTimeout=0,
+            WaitTimeSeconds=0,
+        )
+
+        messages = response['Messages']
+
+        # transform data
+        message_to_delete = [dict(Id=i.get('MessageId'), ReceiptHandle=i.get('ReceiptHandle')) for i in messages]
+        # print(message_to_delete)
+
+        response = self.sqs.delete_message_batch(
+            QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
+            Entries=message_to_delete
+        )
+        return response
+
+
+    def get_message_info(self, messages, course_id):
         user_id_list = [
                 message.get('MessageAttributes', {}).get('User', {}).get('StringValue') for message in messages]
         receipt_handle = [message.get('ReceiptHandle', {}) for message in messages] 
-        return dict(user_id_list=user_id_list, receipt_handle=receipt_handle, course=course)
+        return dict(user_id_list=user_id_list, receipt_handle=receipt_handle, course_id=course_id)
         
 
 

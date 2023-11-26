@@ -37,7 +37,7 @@ jobs:
             ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
             IMAGE_TAG: latest
           run: |
-            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SQS_QUEUE_URL_DS=${{secrets.SQS_QUEUE_URL_DS}} --build-arg SQS_QUEUE_URL_UI=${{secrets.SQS_QUEUE_URL_UI}} --build-arg SQS_QUEUE_URL_BE=${{secrets.SQS_QUEUE_URL_BE}} --build-arg SQS_QUEUE_URL_FE=${{secrets.SQS_QUEUE_URL_FE}} --build-arg SQS_QUEUE_URL_PM=${{secrets.SQS_QUEUE_URL_PM}} --build-arg SQS_QUEUE_URL=${{secrets.SQS_QUEUE_URL}} --build-arg ACCESS_KEY=${{secrets.ACCESS_KEY}} --build-arg SECRET_KEY=${{secrets.SECRET_KEY}} --build-arg GROUP_URL=${{secrets.GROUP_URL}} --build-arg GROUP_BEARER_TOKEN=${{secrets.GROUP_BEARER_TOKEN}} --build-arg ENVIRONMENT=production .
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg SQS_QUEUE_URL_DS=${{secrets.SQS_QUEUE_URL_DS}} --build-arg SQS_QUEUE_URL_UI=${{secrets.SQS_QUEUE_URL_UI}} --build-arg SQS_QUEUE_URL_BE=${{secrets.SQS_QUEUE_URL_BE}} --build-arg SQS_QUEUE_URL_FE=${{secrets.SQS_QUEUE_URL_FE}} --build-arg SQS_QUEUE_URL_PM=${{secrets.SQS_QUEUE_URL_PM}} --build-arg SQS_QUEUE_URL=${{secrets.SQS_QUEUE_URL}} --build-arg ACCESS_KEY=${{secrets.ACCESS_KEY}} --build-arg SECRET_KEY=${{secrets.SECRET_KEY}} --build-arg DEV_URL=${{secrets.DEV_URL}} --build-arg GROUP_BEARER_TOKEN=${{secrets.GROUP_BEARER_TOKEN}} --build-arg ENVIRONMENT=production .
             docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
         - name: Update lambda function code github_run_id:${{ github.run_id }}
