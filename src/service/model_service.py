@@ -15,7 +15,7 @@ class ModelService:
     def run_main_process(self, user_id, course_id):
         # GET OPEN GROUP DETAILS
         """A group is open if the number of users are lesser than or equals to 5"""
-        data = None#self.api_request.get_user_by_course_id(course_id)
+        data = self.api_request.get_user_by_course_id(course_id)
 
         if data:
             new_user = self.api_request.get_user_details(user_id)
