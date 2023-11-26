@@ -52,11 +52,12 @@ jobs:
          #rm -r *.dist-info __pycache__
          #for installing invidividual modules
          #zip files into current directory
-         #zip -r ${{ github.run_id }}.zip . ../app
-         cd ..
-         zip -r ${{ github.run_id }}.zip current_directory app    
+         zip -r ${{ github.run_id }}.zip . ../app
+         #cd ..
+         #zip -r ${{ github.run_id }}.zip current_directory app    
          #ensuring current working directory is accessible by the function--this might not be doing anything
          export PATH=$PATH:$(pwd)
+         echo $PATH:$(pwd)
 
     - name: Upload to S3
       run: aws s3 cp packages/${{ github.run_id }}.zip s3://klusterthon-chat-gpt/deployment/${{ github.run_id }}.zip
