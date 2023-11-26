@@ -52,8 +52,9 @@ jobs:
          #rm -r *.dist-info __pycache__
          #for installing invidividual modules
          #zip files into current directory
-         zip -r ${{ github.run_id }}.zip . ../app
-         
+         #zip -r ${{ github.run_id }}.zip . ../app
+         cd ..
+         zip -r ${{ github.run_id }}.zip current_directory app    
          #ensuring current working directory is accessible by the function--this might not be doing anything
          export PATH=$PATH:$(pwd)
 
