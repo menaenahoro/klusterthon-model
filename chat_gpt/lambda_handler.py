@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-from chat-gpt.app import chatbot
+from chat_gpt.app import chatbot
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
