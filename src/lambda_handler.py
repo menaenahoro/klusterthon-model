@@ -28,14 +28,14 @@ def lambda_handler(event, context):
         result =  boto_3.send_message_queue(user_id=user_id, course_id=course_id)
 
         # Model to process function
-        return dict(message="successful", error=False, data=[])
+        return dict(message="successful", error=False, data=[result])
     
 
     if url_for=="get_queue":
         result =  boto_3.get_queue(course_id=course_id)
 
         # Model to process function
-        return dict(message="successful", error=False, data=result)
+        return dict(message="successful", error=False, data=[result])
 
     if url_for=="model_service":
         # try:
