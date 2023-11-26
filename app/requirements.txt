@@ -1,4 +1,4 @@
 openai
 python-dotenv
-pydantic
+pydantic-core==2.1.2
 urllib3==1.26.15
