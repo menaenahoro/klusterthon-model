@@ -1,4 +1,0 @@
-openai
-python-dotenv
-pydantic-core==2.6.0
-urllib3==1.26.15
