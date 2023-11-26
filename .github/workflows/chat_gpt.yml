@@ -49,6 +49,7 @@ jobs:
          mkdir packages
          cd packages
          mkdir app
+         cp ../app ../packages/app
          pip3 install -r ../app/requirements.txt -t .
          #rm -r *.dist-info __pycache__
          #for installing invidividual modules
