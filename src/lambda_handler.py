@@ -38,13 +38,12 @@ def lambda_handler(event, context):
         return dict(message="successful", error=False, data=[result])
 
     if url_for=="model_service":
-        # try:
-        result = model_service.run_main_process(user_id=user_id, course_id=course_id)
-
-        #     # Model to process function
-        #     return dict(message="successful", error=False, data=result)
-        # except Exception as e:
-        #     return dict(error=True, message=f'error: {e}')
+        try:
+            result = model_service.run_main_process(user_id=user_id, course_id=course_id)
+            # Model to process function
+            return dict(message="successful", error=False, data=result)
+        except Exception as e:
+            return dict(error=True, message=f'error: {e}')
 
     if url_for=="event_bridge":
         try:

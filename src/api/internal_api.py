@@ -205,8 +205,8 @@ class ApiRequest:
                     grouped_data[group_id] = []
                 grouped_data[group_id].append(user_info)
 
-        # Filter groups with less than 5 users
-        filtered_groups = {group_id: users for group_id, users in grouped_data.items() if len(users) < 5}
+        # Filter groups with less than 10 users
+        filtered_groups = {group_id: users for group_id, users in grouped_data.items() if len(users) < 10}
         return filtered_groups
 
     # print(filtered_groups)
