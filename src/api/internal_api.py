@@ -30,7 +30,7 @@ class ApiRequest:
         }
 
         response = requests.post(url, headers=headers, data=json.dumps(data))
-        return response
+        return response.json()
 
 
     def add_user_to_group(self, user_id, course_id, group_id):
@@ -60,7 +60,7 @@ class ApiRequest:
         }
 
         response = requests.post(url, headers=headers, data=json.dumps(data))
-        return response
+        return response.json()
 
     
     def get_user_array(self, user_id_list:List):
@@ -114,6 +114,7 @@ class ApiRequest:
         """
         
         url = f"{DEV_URL}/user/course/user" 
+        print("DEV_URL", DEV_URL)
         headers =  {'Content-Type': 'application/json'}
         data = {
             'courseId': f"{course_id}"

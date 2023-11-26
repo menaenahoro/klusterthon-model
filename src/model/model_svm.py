@@ -74,6 +74,7 @@ class SVMModel:
         df_processed = self.process_dataframe(df)
         target_list = list(df['groupId'].unique())
         # If length of groupId is 1 return
+        print("USER TARGET GROUPS", target_list)
         if len(target_list)<2:
             # Add user to existing group
             return target_list[0]
