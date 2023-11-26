@@ -1,4 +1,4 @@
-from chat_gpt.config import OPEN_AI_KEY
+from app.config import OPEN_AI_KEY
 import openai
 
 openai.api_key = OPEN_AI_KEY

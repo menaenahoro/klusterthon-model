@@ -48,11 +48,11 @@ jobs:
          #install all dependencies as defined by requirements.txt in the current directory
          mkdir packages
          cd packages
-         pip3 install -r ../chat_gpt/requirements.txt -t .
+         pip3 install -r ../app/requirements.txt -t .
          #rm -r *.dist-info __pycache__
          #for installing invidividual modules
          #zip files into current directory
-         zip -r ${{ github.run_id }}.zip . ../chat_gpt
+         zip -r ${{ github.run_id }}.zip . ../app
          
          #ensuring current working directory is accessible by the function--this might not be doing anything
          export PATH=$PATH:$(pwd)
