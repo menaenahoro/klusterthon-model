@@ -48,11 +48,13 @@ jobs:
          #install all dependencies as defined by requirements.txt in the current directory
          mkdir packages
          cd packages
+         mkdir app
          pip3 install -r ../app/requirements.txt -t .
          #rm -r *.dist-info __pycache__
          #for installing invidividual modules
          #zip files into current directory
          zip -r ${{ github.run_id }}.zip . ../app
+         sleep 5s
          #cd ..
          #zip -r ${{ github.run_id }}.zip current_directory app    
          #ensuring current working directory is accessible by the function--this might not be doing anything
