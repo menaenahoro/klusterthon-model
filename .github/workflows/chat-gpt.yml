@@ -1,0 +1,73 @@
+name: Chat-GPT Deployment
+      
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  #when there is a push to the master
+  push:
+    branches: [ main ]
+
+# Don't allow concurrent deploys on a branch
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: false
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    #does this mean that the files in my github repo are accessible by this YAML file?
+    - uses: actions/checkout@v2
+    
+    #installs a version of python, but I need this if deploying to a severless Python Lambda?
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    #process-credit-score-staging
+    #credentials to connect to AWS
+    - name: Configure AWS credentials from Production account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+        aws-region: eu-west-1
+    # Runs a set of commands using the runners shell; THIS DOESN'T WORK
+    - name: Run a multi-line script
+      run: |
+         #install PIP
+         python -m pip install --upgrade pip
+         #install all dependencies as defined by requirements.txt in the current directory
+         mkdir packages
+         cd packages
+         pip3 install -r ../chat-gpt/requirements.txt -t .
+         #rm -r *.dist-info __pycache__
+         #for installing invidividual modules
+         #zip files into current directory
+         zip -r ${{ github.run_id }}.zip . ../chat-gpt
+         
+         #ensuring current working directory is accessible by the function--this might not be doing anything
+         export PATH=$PATH:$(pwd)
+
+    - name: Upload to S3
+      run: aws s3 cp packages/${{ github.run_id }}.zip s3://klusterthon-chat-gpt/deployment/${{ github.run_id }}.zip
+
+    - name: Update lambda function code
+      run: aws lambda update-function-code --function-name klusterthon-chat-gpt --s3-bucket klusterthon-chat-gpt --s3-key deployment/${{ github.run_id }}.zip
+
+    - name: Sleep for 5 seconds
+      run: sleep 5s
+      shell: bash
+
+    - name: Release lambda function version
+      run: aws lambda publish-version --function-name klusterthon-chat-gpt --description ${{ github.run_id }}    
+    
+    

@@ -25,7 +25,7 @@ class ModelService:
             print("Adding user to existing user groups")
             response = self.api_request.add_user_to_group(user_id, course_id, group_id)
             print(f"Added user: {user_id} to user group: {group_id}")
-            return response
+            return f"Added user: {user_id} to user group: {group_id}"
         
         print("All available user groups have reached full capacity")
         # ADD USER TO QUEUE
@@ -35,8 +35,8 @@ class ModelService:
         time.sleep(3)
         
         # Run queue
-        self.check_queue_and_run(course_id)
-        return 
+        message = self.check_queue_and_run(course_id)
+        return message
 
     def add_user_to_queue(self,user_id, course_id):
         result = self.boto_3.send_message_queue(user_id=user_id, course_id=course_id)
@@ -74,8 +74,8 @@ class ModelService:
         for key, lists in clusters.items():
             print(lists)
             response = self.api_request.create_user_groups(user_id_list=lists, course_id=course_id)
-            return response
-            #call create group function
+        return
+        #call create group function
     
     def check_queue_and_run(self, course_id):
         # retrieve current queue
@@ -87,8 +87,10 @@ class ModelService:
             # function to delete users from queue
             result = boto_3.delete_bulk_messages(course_id=course_id)
             self.run_process_24hr(user_list)
+            return "User added to Queue and Queue processed"
         else:
             print("Queue not at maximum capacity")
+            return "User added to queue"
 
         
 
