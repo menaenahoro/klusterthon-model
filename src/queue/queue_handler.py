@@ -61,8 +61,8 @@ class Boto3Class:
             MessageAttributeNames=[
                 'All'
             ],
-            VisibilityTimeout=0,
-            WaitTimeSeconds=0,
+            VisibilityTimeout=30,
+            WaitTimeSeconds=10,
         )
 
         message = response['Messages']
@@ -91,16 +91,26 @@ class Boto3Class:
             MessageAttributeNames=[
                 'All'
             ],
-            VisibilityTimeout=0,
-            WaitTimeSeconds=0,
+            VisibilityTimeout=30,
+            WaitTimeSeconds=10,
         )
 
         messages = response['Messages']
 
-        # transform data
-        message_to_delete = [dict(Id=i.get('MessageId'), ReceiptHandle=i.get('ReceiptHandle')) for i in messages]
-        # print(message_to_delete)
+        # # transform data
+        # message_to_delete = [dict(Id=i.get('MessageId'), ReceiptHandle=i.get('ReceiptHandle'), VisibilityTimeout=30) for i in messages]
+        # print(self.dict_sqs_url.get(course_id, SQS_QUEUE_URL))
 
+        # # Change Visibility timeout
+
+        # response = self.sqs.change_message_visibility_batch(
+        #     QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
+        #     Entries=message_to_delete
+        # )
+
+        message_to_delete = [dict(Id=i.get('MessageId'), ReceiptHandle=i.get('ReceiptHandle')) for i in messages]
+
+        # Delete messages batch
         response = self.sqs.delete_message_batch(
             QueueUrl=self.dict_sqs_url.get(course_id, SQS_QUEUE_URL),
             Entries=message_to_delete

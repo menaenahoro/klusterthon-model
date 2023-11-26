@@ -59,7 +59,7 @@ class SVMModel:
         X = df[features]
         return X
 
-    def process_target(string, target_list):
+    def process_target(self, string, target_list):
         try:
             index = target_list.index(string.lower())
             return index
@@ -73,7 +73,12 @@ class SVMModel:
         # Processing the DataFrame
         df_processed = self.process_dataframe(df)
         target_list = list(df['groupId'].unique())
-        df["groupId"] = df.apply(lambda row: process_target(row["groupId"],target_list), axis=1)
+        # If length of groupId is 1 return
+        if len(target_list)<2:
+            # Add user to existing group
+            return target_list[0]
+        
+        df["groupId"] = df.apply(lambda row: self.process_target(row["groupId"],target_list), axis=1)
         
 
         # Target and features

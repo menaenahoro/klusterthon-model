@@ -1,8 +1,1 @@
-[
-    "65609445ef691b001cd35b57",
-    "65609445ef691b001cd35b57",
-    "65609445ef691b001cd35b57",
-    "65609445ef691b001cd35b57",
-    "65609445ef691b001cd35b57",
-    "65609445ef691b001cd35b57"
-]
+{"Successful": [{"Id": "51fbc364-7996-4a24-8c72-2c825af55bf3"}, {"Id": "1c13694d-0dbe-4d10-9155-a543efbe0960"}, {"Id": "d6db668c-55a8-402a-b980-db903b2ad458"}, {"Id": "ff6d69ad-951e-41dd-81b5-6a6dd5bf6d2c"}, {"Id": "6d2441b4-3b62-49f9-85ef-fb4d43ec420b"}, {"Id": "3c232b28-454a-4c92-a579-c21396791a94"}], "ResponseMetadata": {"RequestId": "4e61fdd0-c091-5d68-bb18-a00c02aff824", "HTTPStatusCode": 200, "HTTPHeaders": {"x-amzn-requestid": "4e61fdd0-c091-5d68-bb18-a00c02aff824", "date": "Sun, 26 Nov 2023 03:48:14 GMT", "content-type": "text/xml", "content-length": "926", "connection": "keep-alive"}, "RetryAttempts": 0}}

@@ -23,9 +23,9 @@ class ModelService:
             group_id = svm_model.train_model_response(data, new_user)
             print(group_id)
             print("Adding user to existing user groups")
-            #response = self.api_request.add_user_to_group(user_id, course_id, group_id)
+            response = self.api_request.add_user_to_group(user_id, course_id, group_id)
             print(f"Added user: {user_id} to user group: {group_id}")
-            return #response
+            return response
         
         print("All available user groups have reached full capacity")
         # ADD USER TO QUEUE
@@ -73,8 +73,8 @@ class ModelService:
 
         for key, lists in clusters.items():
             print(lists)
-            # self.api_request.create_user_groups(user_id_list=lists, course_id=course_id)
-            return
+            response = self.api_request.create_user_groups(user_id_list=lists, course_id=course_id)
+            return response
             #call create group function
     
     def check_queue_and_run(self, course_id):
@@ -83,8 +83,9 @@ class ModelService:
         user_list = self.retrieve_current_queue(course_id)
 
         # if users on on is greater or equals to 10 run model and create group
-        if user_list=>10:
+        if user_list>=10:
             # function to delete users from queue
+            result = boto_3.delete_bulk_messages(course_id=course_id)
             self.run_process_24hr(user_list)
         else:
             print("Queue not at maximum capacity")
