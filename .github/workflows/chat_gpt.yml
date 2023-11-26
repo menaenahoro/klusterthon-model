@@ -48,8 +48,7 @@ jobs:
          #install all dependencies as defined by requirements.txt in the current directory
          mkdir packages
          cd packages
-         mkdir app
-         cp -r ../app ../packages/app
+         cp -r ../app ../packages
          pip3 install -r ../app/requirements.txt -t .
          #rm -r *.dist-info __pycache__
          #for installing invidividual modules
