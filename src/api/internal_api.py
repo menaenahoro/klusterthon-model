@@ -1,4 +1,5 @@
-from src.config.config import GROUP_BEARER_TOKEN, DEV_URL
+import os
+from src.config.config import (GROUP_BEARER_TOKEN, DEV_URL)
 from typing import List
 import requests
 import json
@@ -115,6 +116,7 @@ class ApiRequest:
         
         url = f"{DEV_URL}/user/course/user" 
         print("DEV_URL", DEV_URL)
+        print("GROUP_BEARER_TOKEN", GROUP_BEARER_TOKEN)
         headers =  {'Content-Type': 'application/json'}
         data = {
             'courseId': f"{course_id}"
