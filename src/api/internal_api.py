@@ -18,7 +18,7 @@ class ApiRequest:
         :return: The response from the server after attempting to create the groups.
         """
 
-        url = f"{DEV_URL}:id"
+        url = f"{DEV_URL}/chat/group"
 
         headers = {
             'Authorization': f'Bearer {GROUP_BEARER_TOKEN}',
