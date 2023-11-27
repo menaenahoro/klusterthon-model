@@ -1,0 +1,14 @@
+{
+    "ResponseMetadata": {
+        "RequestId": "41f80f12-859b-597b-93c0-52cdac6f8a38",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "x-amzn-requestid": "41f80f12-859b-597b-93c0-52cdac6f8a38",
+            "date": "Mon, 27 Nov 2023 23:35:26 GMT",
+            "content-type": "text/xml",
+            "content-length": "240",
+            "connection": "keep-alive"
+        },
+        "RetryAttempts": 0
+    }
+}

@@ -65,12 +65,12 @@ class Boto3Class:
             WaitTimeSeconds=10,
         )
 
-        message = response['Messages']
+        # message = response['Messages']
         # receipt_handle = message[0]['ReceiptHandle']
         # print('RECEIPT HANDLE  ',receipt_handle)
-        result = self.get_message_info(message, course_id)
-        user_id_list = result.get('user_id_list', [])
-        return user_id_list
+        # result = self.get_message_info(message, course_id)
+        # user_id_list = result.get('user_id_list', [])
+        return response
 
     def delete_message(self, receipt_handle, course_id):
 

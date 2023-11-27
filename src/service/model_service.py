@@ -28,12 +28,12 @@ class ModelService:
             print("Adding user to existing user groups")
             response = self.api_request.add_user_to_group(user_id, course_id, group_id)
             print(f"Added user: {user_id} to user group: {group_id}")
-            return f"Added user: {user_id} to user group: {group_id}"
+            return group_id
 
         if no_groups:
             # create a group with only user
             response = self.api_request.create_user_groups(user_id_list=[user_id], course_id=course_id)
-            return f"group created with only user {user_id}"
+            return response.get('groupId')
         
         print("All available user groups have reached full capacity")
         # ADD USER TO QUEUE
