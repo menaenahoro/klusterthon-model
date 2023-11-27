@@ -23,7 +23,7 @@ CORS(app)
 
 @app.route('/model',methods = ['POST', 'GET'])
 # ‘/’ URL is bound with hello_world() function.
-def hello_world(user_id, course_id):
+def hello_world():
         print("HEEERRREEEE")
         logger.info("HHHHEEERRREEEEE")
         # get the post data
