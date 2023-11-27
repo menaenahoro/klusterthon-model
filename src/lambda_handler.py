@@ -28,27 +28,32 @@ def lambda_handler(event, context):
         result =  boto_3.send_message_queue(user_id=user_id, course_id=course_id)
 
         # Model to process function
-        return dict(message="successful", error=False, data=[result])
+        return {"message":"successful", "error":False, "data":result, 'headers': {
+        'Access-Control-Allow-Origin': '*'},}
     
 
     if url_for=="get_queue":
         result =  boto_3.get_queue(course_id=course_id)
 
         # Model to process function
-        return dict(message="successful", error=False, data=[result])
+        return {"message":"successful", "error":False, "data":result, 'headers': {
+        'Access-Control-Allow-Origin': '*'},}
 
     if url_for=="model_service":
         result = model_service.run_main_process(user_id=user_id, course_id=course_id)
         # Model to process function
-        return dict(message="successful", error=False, data=result)
+        return {"message":"successful", "error":False, "data":result, 'headers': {
+        'Access-Control-Allow-Origin': '*'},}
 
     if url_for=="event_bridge":
         try:
             result = model_service.run_main_process(user_id=user_id, course_id=course_id)
-            return dict(message="successful", error=False, data=result)
+            return {"message":"successful", "error":False, "data":result, 'headers': {
+            'Access-Control-Allow-Origin': '*'},}
         except Exception as e:
-            return dict(error=True, message=f'error: {e}')
+            return {"message":"unsuccessful", "error":True, "data":[], 'headers': {
+            'Access-Control-Allow-Origin': '*'},}
         # Model to process function
-        return dict(message="successful", error=False, data=result)
 
-
+    return {"message":"successful", "error":False, "data":[], 'headers': {
+    'Access-Control-Allow-Origin': '*'},}
