@@ -12,9 +12,9 @@ class SVMModel:
 
     # Functions to process the data
     def process_personality_score(self, string):
+        personalityScore = ['agreeableness', 'conscientiousness', 'extraversion', 'neuroticism', 'openness']
         if type(string)!=str:
             return len(personalityScore)
-        personalityScore = ['agreeableness', 'conscientiousness', 'extraversion', 'neuroticism', 'openness']
         try:
             index = personalityScore.index(string.lower())
             return index
@@ -22,9 +22,9 @@ class SVMModel:
             return len(personalityScore)
 
     def process_experience(self, string):
+        experience = ['beginner', 'intermediate', 'advanced']
         if type(string)!=str:
             return len(experience)
-        experience = ['beginner', 'intermediate', 'advanced']
         try:
             index = experience.index(string.lower())
             return index
@@ -42,9 +42,9 @@ class SVMModel:
             return len(styles)
 
     def process_gender(self, string):
+        gender = ['male', 'female']
         if type(string)!=str:
             return len(gender)
-        gender = ['male', 'female']
         try:
             index = gender.index(string.lower())
             return index
