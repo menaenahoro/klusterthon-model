@@ -125,10 +125,11 @@ class ApiRequest:
         response = requests.get(url, headers=headers, data=json.dumps(data))
         response_data = response.json()
         
+
+        data = self.combine_group_lists(self.filter_course_data(response_data))
         # if no existing group
         if len(data)==0:
             self.no_groups = True
-        data = self.combine_group_lists(self.filter_course_data(response_data))
         return data, self.no_groups
     
 
@@ -213,7 +214,7 @@ class ApiRequest:
                 grouped_data[group_id].append(user_info)
 
         # Filter groups with less than 15 users
-        filtered_groups = {group_id: users for group_id, users in grouped_data.items() if len(users) < 15}
+        filtered_groups = {group_id: users for group_id, users in grouped_data.items() if len(users) < 5}
         return filtered_groups
 
     # print(filtered_groups)
