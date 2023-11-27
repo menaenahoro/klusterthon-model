@@ -50,7 +50,7 @@ class ModelService:
         user_list = self.boto_3.get_queue(course_id)
         return user_list
 
-    def run_process_24hr(self, user_list):
+    def run_process_24hr(self, user_list, course_id):
 
         # retrieve data from db
         data = self.api_request.get_user_array(user_list)
@@ -88,9 +88,9 @@ class ModelService:
         user_list = self.retrieve_current_queue(course_id)
 
         # if users on on is greater or equals to 10 run model and create group
-        if user_list>=10:
+        if len(user_list)>10:
             # function to delete users from queue
-            result = boto_3.delete_bulk_messages(course_id=course_id)
+            result = self.boto_3.delete_bulk_messages(course_id=course_id)
             self.run_process_24hr(user_list)
             return "User added to Queue and Queue processed"
         else:
