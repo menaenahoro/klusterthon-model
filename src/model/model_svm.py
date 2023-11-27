@@ -66,7 +66,7 @@ class SVMModel:
     def process_target(self, string, target_list):
         try:
             print("TARGET STRING", string)
-            index = target_list.index(string.lower())
+            index = target_list.index(string)
             return index
         except Exception as e:
             return None
