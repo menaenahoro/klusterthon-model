@@ -18,7 +18,7 @@ class SVMModel:
         try:
             index = personalityScore.index(string.lower())
             return index
-        except ValueError:
+        except Exception as e:
             return len(personalityScore)
 
     def process_experience(self, string):
@@ -28,7 +28,7 @@ class SVMModel:
         try:
             index = experience.index(string.lower())
             return index
-        except ValueError:
+        except Exception as e:
             return len(experience)
 
     def process_styles(self, string):
@@ -38,7 +38,7 @@ class SVMModel:
         try:
             index = styles.index(string.lower())
             return index
-        except ValueError:
+        except Exception as e:
             return len(styles)
 
     def process_gender(self, string):
@@ -48,7 +48,7 @@ class SVMModel:
         try:
             index = gender.index(string.lower())
             return index
-        except ValueError:
+        except Exception as e:
             return len(gender)
 
     def transform_dob_to_age(self, dob):
@@ -73,7 +73,7 @@ class SVMModel:
         try:
             index = target_list.index(string.lower())
             return index
-        except ValueError:
+        except Exception as e:
             return len(target_list)
 
     def train_model_response(self, data, new_user):
