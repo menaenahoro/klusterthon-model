@@ -17,6 +17,9 @@ class ModelService:
         """A group is open if the number of users are lesser than or equals to 5"""
         data, no_groups = self.api_request.get_user_by_course_id(course_id)
 
+        print("DATA", data)
+        print("DATA", no_groups)
+
         if data:
             new_user = self.api_request.get_user_details(user_id)
             svm_model = SVMModel()
@@ -88,7 +91,7 @@ class ModelService:
         user_list = self.retrieve_current_queue(course_id)
 
         # if users on on is greater or equals to 10 run model and create group
-        if len(user_list)>10:
+        if len(user_list)>9:
             # function to delete users from queue
             result = self.boto_3.delete_bulk_messages(course_id=course_id)
             self.run_process_24hr(user_list)
