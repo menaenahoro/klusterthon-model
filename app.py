@@ -24,6 +24,8 @@ CORS(app)
 @app.route('/model',methods = ['POST', 'GET'])
 # ‘/’ URL is bound with hello_world() function.
 def hello_world(user_id, course_id):
+        print("HEEERRREEEE")
+        logger.info("HHHHEEERRREEEEE")
         # get the post data
         request_data = json.loads(request.data)
         #check if user exists
