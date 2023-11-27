@@ -56,6 +56,7 @@ class SVMModel:
         df["personalityScore"] = df.apply(lambda row: self.process_personality_score(row["personalityScore"]), axis=1)
         df["gender"] = df.apply(lambda row: self.process_gender(row["gender"]), axis=1)
         df["dob"] = df.apply(lambda row: self.transform_dob_to_age(row["dateOfBirth"]), axis=1)
+        df.fillna(0, inplace=True)
 
         
         features = ['iqScore', 'styles', 'experience', 'personalityScore', 'gender', 'dob']
