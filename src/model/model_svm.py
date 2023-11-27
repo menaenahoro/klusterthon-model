@@ -65,10 +65,11 @@ class SVMModel:
 
     def process_target(self, string, target_list):
         try:
+            print("TARGET STRING", string)
             index = target_list.index(string.lower())
             return index
         except Exception as e:
-            return len(target_list)
+            return None
 
     def train_model_response(self, data, new_user):
         print('course data ',data)
@@ -85,6 +86,7 @@ class SVMModel:
             return target_list[0]
         
         df["groupId"] = df.apply(lambda row: self.process_target(row["groupId"],target_list), axis=1)
+        df["groupId"].fillna(df['groupId'].mode()[0])
         
 
         # Target and features
