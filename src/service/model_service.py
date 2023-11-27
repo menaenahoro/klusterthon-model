@@ -15,7 +15,7 @@ class ModelService:
     def run_main_process(self, user_id, course_id):
         # GET OPEN GROUP DETAILS
         """A group is open if the number of users are lesser than or equals to 5"""
-        data = self.api_request.get_user_by_course_id(course_id)
+        data, no_groups = self.api_request.get_user_by_course_id(course_id)
 
         if data:
             new_user = self.api_request.get_user_details(user_id)
@@ -26,6 +26,11 @@ class ModelService:
             response = self.api_request.add_user_to_group(user_id, course_id, group_id)
             print(f"Added user: {user_id} to user group: {group_id}")
             return f"Added user: {user_id} to user group: {group_id}"
+
+        if no_groups:
+            # create a group with only user
+            response = self.api_request.create_user_groups(user_id_list=[user_id], course_id=course_id)
+            return f"group created with only user {user_id}"
         
         print("All available user groups have reached full capacity")
         # ADD USER TO QUEUE

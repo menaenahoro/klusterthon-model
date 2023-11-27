@@ -5,6 +5,7 @@ import requests
 import json
 
 class ApiRequest:
+    no_groups=False
 
     def create_user_groups(self, user_id_list:List, course_id):
         """
@@ -122,7 +123,13 @@ class ApiRequest:
             'courseId': f"{course_id}"
         }
         response = requests.get(url, headers=headers, data=json.dumps(data))
-        return self.combine_group_lists(self.filter_course_data(response.json()))
+        response_data = response.json()
+        
+        # if no existing group
+        if len(data)==0:
+            self.no_groups = True
+        data = self.combine_group_lists(self.filter_course_data(response_data))
+        return data, self.no_groups
     
 
     def process_get_user_array(self, users):
