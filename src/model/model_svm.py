@@ -96,6 +96,9 @@ class SVMModel:
         y = df['groupId']
         X = df_processed
 
+        print('target column y ', y)
+        print('features column X ', X)
+
         # Creating and training the SVM model
         svm_model = SVC()
         svm_model.fit(X, y)
@@ -104,6 +107,7 @@ class SVMModel:
 
         # Processing the DataFrame
         df_processed_new = process_dataframe(df_new)
+        print("NEW USER", df_new)
 
         # predict group for new user
         group_label = svm_model.predict(df_processed_new)[0]
