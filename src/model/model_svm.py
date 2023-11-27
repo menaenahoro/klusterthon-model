@@ -7,14 +7,11 @@ from datetime import datetime
 
 class SVMModel:
     def __init__(self):
-
         pass
 
     # Functions to process the data
     def process_personality_score(self, string):
         personalityScore = ['agreeableness', 'conscientiousness', 'extraversion', 'neuroticism', 'openness']
-        if type(string)!=str:
-            return len(personalityScore)
         try:
             index = personalityScore.index(string.lower())
             return index
@@ -23,8 +20,6 @@ class SVMModel:
 
     def process_experience(self, string):
         experience = ['beginner', 'intermediate', 'advanced']
-        if type(string)!=str:
-            return len(experience)
         try:
             index = experience.index(string.lower())
             return index
@@ -33,8 +28,6 @@ class SVMModel:
 
     def process_styles(self, string):
         styles = ['visual', 'auditory', 'kinesthetic']
-        if type(string)!=str:
-            return len(styles)
         try:
             index = styles.index(string.lower())
             return index
@@ -43,8 +36,6 @@ class SVMModel:
 
     def process_gender(self, string):
         gender = ['male', 'female']
-        if type(string)!=str:
-            return len(gender)
         try:
             index = gender.index(string.lower())
             return index
@@ -79,6 +70,7 @@ class SVMModel:
             return len(target_list)
 
     def train_model_response(self, data, new_user):
+        print('course data ',data)
         # Converting data to DataFrame
         df = pd.DataFrame(data)
         
