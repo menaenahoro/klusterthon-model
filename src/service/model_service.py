@@ -91,7 +91,7 @@ class ModelService:
         user_list = self.retrieve_current_queue(course_id)
 
         # if users on on is greater or equals to 10 run model and create group
-        if len(user_list)>9:
+        if len(user_list)>5:
             # function to delete users from queue
             result = self.boto_3.delete_bulk_messages(course_id=course_id)
             self.run_process_24hr(user_list)
