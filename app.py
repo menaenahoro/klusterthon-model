@@ -14,18 +14,14 @@ logger.setLevel(logging.INFO)
 boto_3 = Boto3Class()
 model_service = ModelService()
  
-
-
-
 app = Flask(__name__)
 CORS(app)
 
- 
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
 
-@app.route('/login',methods = ['POST', 'GET'])
+@app.route('/model',methods = ['POST', 'GET'])
 # ‘/’ URL is bound with hello_world() function.
 def hello_world(user_id, course_id):
         # get the post data
