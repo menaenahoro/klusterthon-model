@@ -101,7 +101,7 @@ class SVMModel:
         df_new = pd.DataFrame(new_user)
 
         # Processing the DataFrame
-        df_processed_new = process_dataframe(df_new)
+        df_processed_new = self.process_dataframe(df_new)
         print("NEW USER", df_new)
 
         # predict group for new user
