@@ -52,6 +52,8 @@ class SVMModel:
             return len(gender)
 
     def transform_dob_to_age(self, dob):
+        if not dob:
+            return 0
         birth_year = datetime.strptime(dob, "%Y-%m-%d").year
         current_year = datetime.now().year
         return current_year - birth_year
