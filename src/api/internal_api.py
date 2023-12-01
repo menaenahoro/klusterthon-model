@@ -50,6 +50,7 @@ class ApiRequest:
 
         # https://puzzled-necklace-fawn.cyclic.app/api/v1/chat/groups/getUserGroup
         # url = f"{DEV_URL}/chat/groups/addUsers"
+        
         url = f"{DEV_URL}/chat/groups/getUserGroup"
 
         headers = {
