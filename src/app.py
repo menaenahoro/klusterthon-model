@@ -2,7 +2,6 @@
 # An object of Flask class is our WSGI application.
 from flask import Flask, jsonify, request, Blueprint
 from flask_cors import CORS
-
 import logging
 import json
 import os
