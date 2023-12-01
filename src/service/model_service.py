@@ -33,6 +33,7 @@ class ModelService:
         if no_groups:
             # create a group with only user
             response = self.api_request.create_user_groups(user_id_list=[user_id], course_id=course_id)
+            print("CREATE USER GROUP:   ", response)
             return response.get('groupId')
         
         print("All available user groups have reached full capacity")
