@@ -48,7 +48,9 @@ class ApiRequest:
         :return: The response from the server after attempting to create the groups.
         """
 
-        url = f"{DEV_URL}/chat/groups/addUsers"
+        # https://puzzled-necklace-fawn.cyclic.app/api/v1/chat/groups/getUserGroup
+        # url = f"{DEV_URL}/chat/groups/addUsers"
+        url = f"{DEV_URL}/chat/groups/getUserGroup"
 
         headers = {
             'Authorization': f'Bearer {GROUP_BEARER_TOKEN}',
